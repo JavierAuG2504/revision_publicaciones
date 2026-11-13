@@ -39,8 +39,10 @@ dependencies:
   cloud_firestore: ^7.1.0
   firebase_ai: ^5.1.0
   flutter_local_notifications: ^23.0.1
+  flutter_localizations:
+    sdk: flutter
+  firebase_app_check: ^0.5.1
   intl: ^0.20.3
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

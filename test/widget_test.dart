@@ -1,30 +1,51 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:revision_publicaciones/main.dart';
+import 'package:revision_publicaciones/modelos/publicacion.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('Validaciones del formulario', () {
+    test('cliente vacío no es válido', () {
+      expect(Publicacion.validarCliente(''), isNotNull);
+      expect(Publicacion.validarCliente('   '), isNotNull);
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    test('cliente de más de 100 caracteres no es válido', () {
+      expect(Publicacion.validarCliente('a' * 101), isNotNull);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('cliente normal es válido', () {
+      expect(Publicacion.validarCliente('Cafetería Brisa'), isNull);
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('título de más de 150 caracteres no es válido', () {
+      expect(Publicacion.validarTitulo('a' * 151), isNotNull);
+    });
+
+    test('texto de más de 2,200 caracteres no es válido', () {
+      expect(Publicacion.validarTexto('a' * 2201), isNotNull);
+      expect(Publicacion.validarTexto(''), isNull);
+    });
+  });
+
+  group('Estado de la publicación', () {
+    test('queda lista solo con los 5 puntos marcados', () {
+      final todos = {
+        for (final p in puntosRevision) p.clave: const EstadoPunto(hecho: true),
+      };
+      expect(Publicacion.calcularEstado(todos), 'listo');
+    });
+
+    test('sigue pendiente si falta un punto', () {
+      final casi = {
+        for (final p in puntosRevision) p.clave: const EstadoPunto(hecho: true),
+      };
+      casi['formato'] = const EstadoPunto(hecho: false);
+      expect(Publicacion.calcularEstado(casi), 'pendiente');
+    });
+
+    test('la checklist nueva tiene los 5 puntos sin marcar', () {
+      final vacio = Publicacion.checklistVacio();
+      expect(vacio.length, 5);
+      expect(vacio.values.every((v) => v['hecho'] == false), isTrue);
+    });
   });
 }
