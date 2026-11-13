@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "880228045322",
+    "project_id": "revision-publicaciones",
+    "storage_bucket": "revision-publicaciones.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880228045322:android:2957aa7e7fb20540dbc5f3",
+        "android_client_info": {
+          "package_name": "com.javieraudelo.revision_publicaciones"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeDGZQwhAE7dFi7p0hBNBC7hk8yszfzZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
