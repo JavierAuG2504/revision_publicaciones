@@ -20,8 +20,14 @@ Future<void> main() async {
   // App Check es obligatorio para usar Gemini con Firebase AI Logic.
   // En desarrollo se usa el proveedor de depuración; su token se registra
   // en la consola de Firebase (Seguridad > App Check > Administrar tokens).
+  // En el APK de entrega, el token se pasa al compilar con --dart-define
+  // y nunca se guarda en el repositorio. En desarrollo queda vacío y
+  // el emulador usa su propio token registrado.
+  const tokenApk = String.fromEnvironment('APP_CHECK_DEBUG_TOKEN');
   await FirebaseAppCheck.instance.activate(
-    providerAndroid: const AndroidDebugProvider(),
+    providerAndroid: AndroidDebugProvider(
+      debugToken: tokenApk.isEmpty ? null : tokenApk,
+    ),
   );
 
   await initializeDateFormatting('es_MX');

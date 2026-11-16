@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function autenticado() {
+      return request.auth != null;
+    }
+
+    function publicacionValida(d) {
+      return d.keys().hasAll(['cliente', 'titulo', 'redSocial', 'texto', 'fechaPublicacion', 'estado', 'checklist', 'creadoPor'])
+        && d.cliente is string && d.cliente.size() > 0 && d.cliente.size() <= 100
+        && d.titulo is string && d.titulo.size() > 0 && d.titulo.size() <= 150
+        && d.redSocial in ['Instagram', 'Facebook', 'TikTok', 'X']
+        && d.texto is string && d.texto.size() <= 2200
+        && d.fechaPublicacion is timestamp
+        && d.estado in ['pendiente', 'listo']
+        && d.checklist is map
+        && d.checklist.keys().hasOnly(['ortografia', 'logo', 'horario', 'aprobacion', 'formato']);
+    }
+
+    match /publicaciones/{pubId} {
+      allow read: if autenticado();
+      allow create: if autenticado()
+        && request.resource.data.creadoPor == request.auth.uid
+        && publicacionValida(request.resource.data);
+      allow update: if autenticado()
+        && request.resource.data.creadoPor == resource.data.creadoPor
+        && publicacionValida(request.resource.data);
+      allow delete: if autenticado()
+        && resource.data.creadoPor == request.auth.uid;
+    }
+  }
+}
