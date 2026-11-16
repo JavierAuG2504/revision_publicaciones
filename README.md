@@ -8,7 +8,7 @@ Proyecto integrador, etapa 3: *Soluciones de Programación Móvil*, Universidad 
 
 **[Descargar APK (v1.0.1)](https://github.com/JavierAuG2504/revision_publicaciones/releases/latest/download/revision_publicaciones_v1.0.1.apk)**
 
-Requiere Android 7.0 o superior y conexión a internet.
+Requiere Android 10 o superior y conexión a internet.
 
 ## Funciones
 
